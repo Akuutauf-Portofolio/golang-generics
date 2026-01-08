@@ -1,0 +1,86 @@
+pengenalan generic
+- generic adalah kemampuan menambahkan parameter type saat membuat function
+- berbeda dengan tipe data yang biasa kita gunakan di function, generic memungkinkan kita bisa mengubah ubah bentuk tipe data sesuai dengan yang kita mau
+- fitur generic baru ada sejak golang versi 1.18
+
+manfaat generic
+- pengecekan ketika proses kompilasi (memastikan tidak terjadi error pada program sebelum di running)
+- tidak perlu manual menggunakan pengecekan tipe data dan konversi tipe data
+- memudahkan programmer membuat kode program yang generic (umum), sehingga bisa digunakan oleh berbagai tipe data
+
+package yang diperlukan :
+- go get github.com/stretchr/testify
+- go mod tidy
+
+type parameter
+- untuk menandai sebuah function merupakan tipe generic, kita perlu menambahkan Type parameter pada function tersebut
+- pembuatan type parameter menggunakan tanda [] (kurung siku / kurung kotak), dimana di dalam kurung tersebut, kita tentukan nama type parameter nya
+- hampir sama dengan bahasa pemrograman lain seperti java, C# dan lain lain, biasanya nama type parameter hanya menggunakan satu huruf, misal T, K, V dan lain lain. Walupun biasanya lebih dari satu huruf
+
+type constraint
+- di bahasa pemrograman seperti java, C# dan lain lain, type parameter biasanya tidak perlu kita tentukan tipe datanya, berbeda dengan di golang
+- type parameter di golang wajib memiliki constraint
+- type constraint merupakan aturan yang digunakan untuk menentukan tipe data yang diperbolehkan pada type parameter
+- contoh, jika kita ingin type parameter bisa digunakan untuk semua tipe data, kita bisa gunakan interface{} (kosong), sebagai constraint nya
+- type constraint yang lebih detail akan di jabarkan pada materi type sets
+
+tipe data any
+- di golang v1.18, diperkenalkan alias baru bernama any untuk interface{} (kosong), ini bisa mempermudah kita ketika membuat type parameter dengan constraint interface{}, jadi kita cukup gunakan constraint any
+
+menggunakan type parameter
+- setelah kita membuat type parameter di function, selanjutnya kita bisa menggunakan type parameter tersebut sebagai tipe data di dalam function tersebut
+- misalnya digunakan untuk return type atau function parameter
+- kita cukup gunakan nama type parameter nya saja
+- type parameter hanya bisa digunakan di functionnya saja, tidak bisa digunakan diluar function
+
+multiple type parameter
+- penggunakan type parameter bisa lebih dari satu, jika kita ingin menambahkan multiple type parameter kita cukup gunakan tanda ',' (koma) sebagai pemisah antar type parameter
+- nama type parameter harus berbeda, tidak boleh sama jika kita menambah type parameter lebih dari satu
+
+comparable
+- selain any, di golang versi 1.18 juga terdapat tipe data bernama comparble
+- comparable merupakan interface yang di implementasikan oleh tipe data yang bisa dibandingkan (menggunakan operator != dan ==), seperti booleans, numbers, strings, pointers, channels, interfaces, array yang isinya ada comparable type, atau structs yang fields nya adalah comparable type
+
+type parameter inheritance
+- golang sendiri sebenarnya tidak memiliki konsep pewarisan, namun seperti kita ketahui, jika kita membuat sebuah type yang sesuai dengan kontrak interface, maka dianggap sebagai implementasi interface tersebut
+- type parameter juga mendukung hal serupa, kita bisa gunakan constraint dengan menggunakan interface, maka secara otomatis semua interface yang compatible dengan type constraint tersebut bisa kita gunakan 
+
+type sets
+- salah satu fitur yang menarik di golang generic adalah type sets
+- kita bisa menentukan lebih dari satu tipe constraint yang diperbolehkan pada type parameter
+
+membuat type sets
+- type sets adalah sebuah interface
+- cara membuat type sets :
+type NamaTypeSets interface {
+    P | Q | R
+}
+- TypeSet hanya bisa digunakan pada type parameter, tidak bisa digunakan sebagai tipe data field atau variabel
+- jika operator bisa digunakan di semua tipe data di dalam type set, maka operator tersebut bisa digunakan dalam kode generic
+
+type declaration
+- kadang, kita sering membuat type declaration di golang untuk tipe data lain, misal kita membuat tipe data Age untuk tipe data int
+- secara default, jika kita gunakan Age sebagai type declaration untuk int, lalu kita membuat type set yang berisi constraint int, maka tipe data Age dianggap tidak compatible dengan TypeSet yang kita buat
+
+type approximation
+- untungnya di golang memiliki fitur bernama type approximation, dimana kita bisa menyebutkan bahwa semua constraint dengan tipe tersebut dan juga yang memiliki tipe dasarnya adalah tipe tersebut, maka bisa digunakan
+- untuk menggunakan type approximation, kita bisa berikan tanda '~' (tilde)
+
+type inference
+- merupakan fitur dimana kita tidak perlu menyebutkan type parameter ketika memanggil kode generic
+- tipe data type parameter bisa dibaca secara otomatis misal dari parameter yang kira kirim
+- namun perlu diingat, pada beberapa kasus, jika terjadi error karena type inference, kita bisa dengan mudah memperbaikinya dengan cara menyebutkan type parameter nya saja
+
+generic type
+- golang juga bisa digunakan ketika membuat generic di type bukan hanya di function
+
+generic struct
+- struct juga mendukung generic
+- dengan menggunakan generic, kita bisa membuat field dengan tipe data yang sesuai dengan Type parameter
+
+generic method
+- selain di function, kita juga bisa menambahkan generic di method (function di struct)
+- namun, generic di method merupakan generic yang terdapat di struct nya
+- kita wajib menyebutkan semua type parameter yang terdapat di struct, walaupun tidak kita gunakan misalnya, atau jika tidak ingin kita gunakan, kita bisa gunakan tanda '_' (garis bawah) sebagai pengganti type parameter nya
+- method tidak bisa memiliki type parameter yang mirip dengan function
+
