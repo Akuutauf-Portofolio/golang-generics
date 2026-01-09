@@ -84,3 +84,31 @@ generic method
 - kita wajib menyebutkan semua type parameter yang terdapat di struct, walaupun tidak kita gunakan misalnya, atau jika tidak ingin kita gunakan, kita bisa gunakan tanda '_' (garis bawah) sebagai pengganti type parameter nya
 - method tidak bisa memiliki type parameter yang mirip dengan function
 
+generic interface
+- generic juga bisa kita gunakan di interface
+- secara otomatis, semua struct yang ingin mengikuti interface yang mengimplementasikan generic harus menggunakan generic juga
+
+in line type constraint
+- sebelumnya, kita selalu menggunakan type declaration atau type set ketika membuat type constraint di type parameter
+- sebenarnya tidak ada kewajian harus membuat type declaration atau type set jika kita ingin membuat type parameter, kita bisa gunakan secara langsung (in line) pada type constraint, misalnya diawal kita sudah membahas tentang interface{} (kosong), tapi kita selalu menggunakan type declaration any
+- jika kita mau, kita juga bisa langsung gunakan interface {int | float32 | float64 }, dibanding membuat type set Number misalnya
+
+generic di type parameter
+- pada kasus tertentu, kadang ada kebutuhan kita menggunakan type parameter yang ternyata type tersebut juga generic atau memiliki type parameter
+- kita juga bisa menggunakan in line type constraint agar lebih mudah, dengan cara menambahkan type parameter selanjutnya, misal
+- [S interface{[]E}, E interface{}]. artinya S harus slice element E, dimana E tipe apapun
+- atau di singkat seperti ini : [S[] E, E any], artinya S harus slice element E, dimana E boleh tipe apapun
+
+experimental package
+- golang v.1.18, terdapat experimental package yang banyak menggunakan fitur generic, namun belum resmi masuk ke golang standard library
+- referensi dokumentasi : https://pkg.go.dev/golang.org/x/exp
+- install package / library : go get golang.org/x/exp
+
+constraint package
+- constraint package berisi type declaration yang bisa kita gunakan untuk tipe data bawaan golang, misal Number, Complex, Ordered dan lain lain
+- referensi : https://pkg.go.dev/golang.org/x/exp/constraints
+
+map & slices packages
+- terdapat juga packages maps dan slices, yang berisi function untuk mengelola map dan slice, namun sudah menggunakan fitur generic
+- referensi : https://pkg.go.dev/golang.org/x/exp/maps
+- referensi : https://pkg.go.dev/golang.org/x/exp/slices
